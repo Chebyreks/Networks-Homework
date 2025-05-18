@@ -1,0 +1,26 @@
+services:
+  user1:
+    stdin_open: true
+    tty: true
+    build: 
+      context: .
+      dockerfile: ./user1/Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - p2p-net
+  user2:
+    stdin_open: true
+    tty: true
+    build: 
+      context: .
+      dockerfile: ./user2/Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - p2p-net
+
+networks:
+  p2p-net:
+    driver: bridge
+
