@@ -2,7 +2,6 @@ import sys, threading
 import socket
 import json
 import time
-from P2Pnode import P2Pnode
 
 class GameInstance:
     def __init__(self, start):
@@ -32,6 +31,7 @@ class GameInstance:
                 print("Игра закончилась: Ничья")
             else:
                 print("Игра закончилась: Поражение")
+            self.game_over = True
         self.current_player = self.my_symbol
         
     def check_win_condition(self):
@@ -54,14 +54,14 @@ class GameInstance:
         return False
     
     def check_cell(self, row, col):
-        return self.board[row][col] == None and (row < 2 and row >= 0) and (col < 2 and col >= 0)
+        return self.board[row][col] == ' ' and (row <= 2 and row >= 0) and (col <= 2 and col >= 0)
     
     def make_move(self, row, col, symbol):
         self.board[row][col] = symbol
         self.print_board()
         self.current_player = self.op_symbol
-
-    def run(self, node : P2Pnode, start):
+    def run(self, node, start):
+        from P2Pnode import P2Pnode # Костыль лютый
         if (start):
             print("Вы ходите первые (крестики)")
         else:
@@ -71,7 +71,9 @@ class GameInstance:
                 print("Введите ход в виде ряда и столбца через пробел")
                 while True:
                     row, col = map(int, input().split(' '))
-                    if not self.check_cell(row, col):
+                    row -= 1
+                    col -= 1
+                    if self.check_cell(row, col):
                         break
                     else:
                         print("Неправильная ячейка, попробуй ещё раз")

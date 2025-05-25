@@ -48,7 +48,6 @@ class P2Pnode:
                 break
             message = json.loads(data.decode())
             self.game_instance.process_message(message)
-        print("Что-то пошло не так (")
         self.end_connections()
 
     def accept_connections(self, client_socket):
